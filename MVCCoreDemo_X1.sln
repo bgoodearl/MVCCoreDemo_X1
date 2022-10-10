@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCDemo", "MVCDemo\MVCDemo.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docs", "_docs", "{07609E6F-A7A5-42D3-8AEC-53B2F4D3D4FF}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
 		readme.md = readme.md
 		_docs\__MAD_DevNotes.md = _docs\__MAD_DevNotes.md
 	EndProjectSection
