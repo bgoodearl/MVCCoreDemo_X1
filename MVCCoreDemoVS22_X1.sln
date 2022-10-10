@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32901.213
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCDemo", "MVCDemo\MVCDemo.csproj", "{E54853C1-8965-424D-B4E5-6662600A3E54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docs", "_docs", "{07609E6F-A7A5-42D3-8AEC-53B2F4D3D4FF}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+		_docs\__MAD_DevNotes.md = _docs\__MAD_DevNotes.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E54853C1-8965-424D-B4E5-6662600A3E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E54853C1-8965-424D-B4E5-6662600A3E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E54853C1-8965-424D-B4E5-6662600A3E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E54853C1-8965-424D-B4E5-6662600A3E54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E4E9CE3-9D51-452A-9E07-3902E32672A0}
+	EndGlobalSection
+EndGlobal
