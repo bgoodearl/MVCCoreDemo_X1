@@ -1,0 +1,2 @@
+# Don't version user-specific appsettings
+appsettings.[Uu]ser_*.json

@@ -13,6 +13,7 @@
 		<td>
 			Created web app, 
 			added ability to have user-specific appsettings<br/>
+			Added Blazor demo w/Counter<br/>
 		</td>
 	</tr>
 </table>

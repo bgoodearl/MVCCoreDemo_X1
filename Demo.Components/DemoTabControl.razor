@@ -1,0 +1,14 @@
+﻿<div>This is a TabControl</div>
+<div class="btn-group" role="group">
+    @foreach (DemoTabPage tabPage in Pages)
+    {
+        <button type="button"
+                class="btn @GetButtonClass(tabPage)"
+                @onclick=@( () => ActivatePage(tabPage) )>
+            @tabPage.Text
+        </button>
+    }
+</div>
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>

@@ -1,0 +1,9 @@
+@using Demo.Components
+@{
+    Layout = "~/Views/Shared/_LayoutBlazor.cshtml";
+    ViewData["Title"] = "Counter";
+}
+
+<h1 class="h2">Counter</h1>
+
+<component type="typeof(Counter)" render-mode="Server" />

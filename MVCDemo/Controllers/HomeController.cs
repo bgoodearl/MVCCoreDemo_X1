@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace MVCDemo.Controllers
 {
     [Authorize]
+    [Route("[Controller]/[Action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,6 +22,7 @@ namespace MVCDemo.Controllers
         }
 
         [AllowAnonymous]
+        [Route("~/")]
         public IActionResult Index()
         {
             return View();

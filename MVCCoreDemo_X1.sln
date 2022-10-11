@@ -3,13 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32901.213
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCDemo", "MVCDemo\MVCDemo.csproj", "{E54853C1-8965-424D-B4E5-6662600A3E54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCDemo", "MVCDemo\MVCDemo.csproj", "{E54853C1-8965-424D-B4E5-6662600A3E54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docs", "_docs", "{07609E6F-A7A5-42D3-8AEC-53B2F4D3D4FF}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.txt = LICENSE.txt
 		readme.md = readme.md
 		_docs\__MAD_DevNotes.md = _docs\__MAD_DevNotes.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Components", "Demo.Components\Demo.Components.csproj", "{A26EB0BE-9D89-4EAB-823E-0DF8A831B72A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{C88EE586-6F22-4A7C-BBE8-CA07D5A1E5A2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Global
@@ -22,6 +30,10 @@ Global
 		{E54853C1-8965-424D-B4E5-6662600A3E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E54853C1-8965-424D-B4E5-6662600A3E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E54853C1-8965-424D-B4E5-6662600A3E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A26EB0BE-9D89-4EAB-823E-0DF8A831B72A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A26EB0BE-9D89-4EAB-823E-0DF8A831B72A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A26EB0BE-9D89-4EAB-823E-0DF8A831B72A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A26EB0BE-9D89-4EAB-823E-0DF8A831B72A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
