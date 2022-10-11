@@ -1,17 +1,16 @@
+using Demo.Infrastructure;
+using Demo.Shared.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MDS = MVCDemo.Services;
 
 namespace MVCDemo
 {
@@ -30,6 +29,8 @@ namespace MVCDemo
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
+            bool blazorDetailedErrors = Configuration.GetValue<bool>($"{nameof(Models.Configuration.AppSettings)}:{nameof(Models.Configuration.AppSettings.blazorDetailedErrors)}");
+
             services.AddControllersWithViews(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -37,9 +38,13 @@ namespace MVCDemo
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddCircuitOptions(options => options.DetailedErrors = blazorDetailedErrors);
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
+            services.AddDemoInfrastructure();
+
+            services.AddScoped<CircuitHandler>((sp) =>
+                new MDS.CircuitHandlerService(sp.GetRequiredService<IBlazorUserService>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,5 +15,15 @@ namespace MVCDemo.Controllers
         {
             return View();
         }
+
+        public IActionResult Forecast()
+        {
+            return View();
+        }
+
+        public IActionResult UserInfo()
+        {
+            return View();
+        }
     }
 }

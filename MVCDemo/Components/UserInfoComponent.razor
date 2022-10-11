@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Components.Server.Circuits
+@inject CircuitHandler BlazorCircuitHandler
+
+<div>
+@if (!string.IsNullOrWhiteSpace(Message))
+{
+    <p>@Message</p>
+}
+</div>
+<div>
+    <p>User: [@MyUsername]</p>
+</div>
+
+@if (UserAuthenticated)
+{
+    @if (ClaimItems.Count > 0)
+    {
+        <div>
+            <h2>Claims</h2>
+            <table class="table">
+                <tr><th>Type</th><th>Value</th></tr>
+                @foreach (var item in ClaimItems)
+                {
+                    <tr>
+                        <td>@item.ClaimType</td>
+                        <td>@item.ClaimValue</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+}
+
+@if (ShowDiagnostics)
+{
+    <hr/>
+    <div>@MyCircuitMessage</div>
+<div>
+    <p>User: [@MyUsername] - Circuits: @MyUserCircuitCount</p>
+</div>
+<div>@UserRemovedMessage</div>
+}

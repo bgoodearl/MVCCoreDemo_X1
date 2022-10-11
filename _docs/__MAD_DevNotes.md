@@ -14,6 +14,9 @@
 			Created web app, 
 			added ability to have user-specific appsettings<br/>
 			Added Blazor demo w/Counter<br/>
+            Added Weather Forecast component<br/>
+            Added logging with NLog<br/>
+            Added Blazor UserInfoComponent<br/>
 		</td>
 	</tr>
 </table>

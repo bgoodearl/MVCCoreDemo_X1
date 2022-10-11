@@ -1,0 +1,9 @@
+@using MVCDemo.Components
+@{
+    Layout = "~/Views/Shared/_LayoutBlazor.cshtml";
+    ViewData["Title"] = "User Info";
+}
+
+<h1 class="h2">User Info</h1>
+
+<component type="typeof(UserInfoComponent)" render-mode="Server" />

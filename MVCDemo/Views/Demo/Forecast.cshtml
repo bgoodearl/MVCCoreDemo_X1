@@ -1,0 +1,9 @@
+@using Demo.Components
+@{
+    Layout = "~/Views/Shared/_LayoutBlazor.cshtml";
+    ViewData["Title"] = "Forecast";
+}
+
+<h1 class="h2">Forecast</h1>
+
+<component type="typeof(FetchData)" render-mode="Server" />
