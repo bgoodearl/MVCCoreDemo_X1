@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_docs", "_docs", "{07609E6F-A7A5-42D3-8AEC-53B2F4D3D4FF}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.txt = LICENSE.txt
+		_docs\MAD_DevResources.md = _docs\MAD_DevResources.md
 		readme.md = readme.md
 		_docs\__MAD_DevNotes.md = _docs\__MAD_DevNotes.md
 	EndProjectSection
@@ -20,9 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Infrastructure", "Demo.Infrastructure\Demo.Infrastructure.csproj", "{45D1341D-A53C-4EF8-9595-D5F30840B1BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Infrastructure", "Demo.Infrastructure\Demo.Infrastructure.csproj", "{45D1341D-A53C-4EF8-9595-D5F30840B1BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Shared", "Demo.Shared\Demo.Shared.csproj", "{822DB5D0-0166-434C-A446-26B0DD53FC1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Shared", "Demo.Shared\Demo.Shared.csproj", "{822DB5D0-0166-434C-A446-26B0DD53FC1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
