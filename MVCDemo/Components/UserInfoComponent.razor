@@ -18,11 +18,11 @@
         <div>
             <h2>Claims</h2>
             <table class="table">
-                <tr><th>Type</th><th>Value</th></tr>
+                <tr><th>Type/Value Type</th><th>Value</th></tr>
                 @foreach (var item in ClaimItems)
                 {
                     <tr>
-                        <td>@item.ClaimType</td>
+                        <td>@item.ClaimType<br/></td>
                         <td>@item.ClaimValue</td>
                     </tr>
                 }

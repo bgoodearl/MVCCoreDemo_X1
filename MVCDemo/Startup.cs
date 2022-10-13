@@ -1,9 +1,11 @@
-//#define USE_IDSVR6
+//#define USE_IDSVR6 //***TODO: Put this in project settings
 using Demo.Infrastructure;
 using Demo.Shared.Interfaces;
+#if USE_IDSVR6
 using Microsoft.AspNetCore.Authentication;
-#if !USE_IDSVR6
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+#else
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 #endif
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -13,13 +15,17 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 #if USE_IDSVR6
 using Microsoft.IdentityModel.Tokens;
 using MVCDemo.Models;
 using MVCDemo.Models.Configuration;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 #else
+using Microsoft.Identity.Web;
+using MVCDemo.AuthHelpers;
+using MVCDemo.Middleware;
+using MVCDemo.Models;
 #endif
 using MDS = MVCDemo.Services;
 using SIO = System.IO;
@@ -55,21 +61,31 @@ namespace MVCDemo
             //*** Uncomment ONLY for local testing ***
             //Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 #endif
+            //Inject settings configuration file using Options pardigm
+            services.Configure<Models.Configuration.AppSettings>(options => Configuration.GetSection(nameof(Models.Configuration.AppSettings)).Bind(options));
+
+            string authCookieName = Configuration.GetValue<string>("AppSettings:authCookieName");
+            string authCookiePath = Configuration.GetValue<string>("AppSettings:authCookiePath");
+
+#if USE_IDSVR6
+            if (string.IsNullOrWhiteSpace(authCookieName))
+            {
+                authCookieName = MVCDemoDefs.defaultAppIdCookieName;
+#if DEBUG
+                logger.Debug($"authCookieName(1) = [{authCookieName}]");
+#endif
+            }
+#else
+            if (string.IsNullOrWhiteSpace(authCookieName)) authCookieName = MVCDemoDefs.Defaults.authCookieName;
+#endif
+
+            int? cookieMinutes = Configuration.GetValue<int?>("AppSettings:cookieMin");
+            if (!cookieMinutes.HasValue) cookieMinutes = 10;
 
 #if USE_IDSVR6
             IdentityServerOptions idSverSettings = Configuration.GetSection("IdentityServer").Get<IdentityServerOptions>();
-            int? cookieMinutes = Configuration.GetValue<int?>("AppSettings:cookieMin");
-            if (!cookieMinutes.HasValue) cookieMinutes = 10;
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             {
-                string appIdCookieName = Configuration.GetValue<string>($"{nameof(Models.Configuration.AppSettings)}:appIdCookieName");
-                if (string.IsNullOrWhiteSpace(appIdCookieName))
-                {
-                    appIdCookieName = MVCDemoDefs.defaultAppIdCookieName;
-#if DEBUG
-                    logger.Debug($"appIdCookieName(1) = [{appIdCookieName}]");
-#endif
-                }
                 services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = "Cookies";
@@ -77,8 +93,11 @@ namespace MVCDemo
                 })
                     .AddCookie("Cookies", options =>
                     {
-                        options.Cookie.Name = appIdCookieName;
-                        //options.Cookie.Path = "/m2"; //10/10/2022 - causes problems with Blazor applets - if used for real, needs to come from configuration
+                        options.Cookie.Name = authCookieName;
+                        if (!string.IsNullOrWhiteSpace(authCookiePath))
+                        {
+                            options.Cookie.Path = authCookiePath; //10/10/2022 - causes problems with Blazor applets - if used for real, needs to come from configuration
+                        }
                         options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieMinutes.Value);
                     })
                     .AddOpenIdConnect("oidc", options =>
@@ -114,8 +133,17 @@ namespace MVCDemo
                     });
             }
 #else
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+                //.AddMicrosoftIdentityWebApp(Configuration);
+                .AddMicrosoftIdentityWebApp(x =>
+                {
+                    Configuration.GetSection("AzureAd").Bind(x);
+                    x.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    x.Events.OnTokenValidated += OpenIdConnectEventHandlers.OnTokenValidatedFunc;
+                }, options => {
+                    options.Cookie.Name = authCookieName;
+                    if (!string.IsNullOrWhiteSpace(authCookiePath)) options.Cookie.Path = authCookiePath;
+                });
 #endif
 
             bool blazorDetailedErrors = Configuration.GetValue<bool>($"{nameof(Models.Configuration.AppSettings)}:{nameof(Models.Configuration.AppSettings.blazorDetailedErrors)}");
@@ -162,6 +190,9 @@ namespace MVCDemo
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+#if !USE_IDSVR6
+            app.UseSignedOutMiddleware();
+#endif
 
             app.UseRouting();
 

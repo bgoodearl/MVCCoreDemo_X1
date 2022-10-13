@@ -9,6 +9,20 @@
 		<th>Notes</th>
 	</tr>
 	<tr>
+		<td>10/13/2022</td><td>bg</td>
+		<td>
+            Added middleware to ensure removal of auth cookie after signout<br/>
+			Made auth cookie name and path configurable for Microsoft.Identity<br/>
+		</td>
+	</tr>
+	<tr>
+		<td>10/12/2022</td><td>bg</td>
+		<td>
+			Switched to Microsoft.Identity.Web<br/>
+            Changed UI URLs to start with "~/x2/"
+		</td>
+	</tr>
+	<tr>
 		<td>10/11/2022</td><td>bg</td>
 		<td>
 			Started changes to support use of Identity Server v6<br/>

@@ -2,10 +2,10 @@
 
 namespace MVCDemo.Controllers
 {
-    [Route("[Controller]/[Action]")]
+    [Route("~/x2/[Controller]/[Action]")]
     public class DemoController : Controller
     {
-        [Route("~/[Controller]")]
+        [Route("~/x2/[Controller]")]
         public IActionResult Index()
         {
             return View();

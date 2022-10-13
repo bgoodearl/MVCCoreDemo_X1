@@ -25,6 +25,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Infrastructure", "Demo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Shared", "Demo.Shared\Demo.Shared.csproj", "{822DB5D0-0166-434C-A446-26B0DD53FC1B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigSource", "ConfigSource", "{E15182CD-7142-4975-AC6E-E9B45D595995}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVCDemo", "MVCDemo", "{DC2EACC4-B134-4B8E-BE78-CFA7F100B783}"
+	ProjectSection(SolutionItems) = preProject
+		_ConfigSource\MVCDemo\appsettings.user_xxxx.json = _ConfigSource\MVCDemo\appsettings.user_xxxx.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +57,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DC2EACC4-B134-4B8E-BE78-CFA7F100B783} = {E15182CD-7142-4975-AC6E-E9B45D595995}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E4E9CE3-9D51-452A-9E07-3902E32672A0}

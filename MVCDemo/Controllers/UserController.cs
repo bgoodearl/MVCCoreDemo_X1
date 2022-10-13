@@ -13,7 +13,7 @@ namespace MVCDemo.Controllers
     {
         [AllowAnonymous]
         [ResponseCache(Duration = 0, NoStore = true)]
-        [Route("~/signin")]
+        [Route("~/x2/signin")]
         public IActionResult SignIn()
         {
             if (!HttpContext.User.Identity.IsAuthenticated)
@@ -29,14 +29,22 @@ namespace MVCDemo.Controllers
 
 
         [Authorize]
-        [Route("~/signout")]
+        [Route("~/x2/signout")]
         public IActionResult SignOut()
         {
 #if USE_IDSVR6
             return SignOut("Cookies", "oidc");
 #else
-            return SignOut(OpenIdConnectDefaults.AuthenticationScheme);
+            var signOutResult = SignOut(OpenIdConnectDefaults.AuthenticationScheme);
+            return signOutResult;
 #endif
+        }
+
+        [AllowAnonymous]
+        [Route("~/x2/signedout")]
+        public IActionResult SignedOut()
+        {
+            return RedirectToAction("Index", "Home", null);
         }
 
     }

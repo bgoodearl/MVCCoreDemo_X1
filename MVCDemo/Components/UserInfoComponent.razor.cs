@@ -9,6 +9,7 @@ using MDS = MVCDemo.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SSC = System.Security.Claims;
 
 namespace MVCDemo.Components
 {
@@ -136,10 +137,31 @@ namespace MVCDemo.Components
                 ClaimItems = new List<ClaimInfo>();
                 foreach(var claim in userInfo.User.Claims)
                 {
+                    string claimValue = claim.Value;
+                    if (!string.IsNullOrWhiteSpace(claim.ValueType)
+                        && claim.ValueType == SSC.ClaimValueTypes.Integer)
+                    {
+                        long unixDateTime;
+                        if (!string.IsNullOrWhiteSpace(claimValue) && long.TryParse(claimValue, out unixDateTime))
+                        {
+                            try
+                            {
+                                DateTimeOffset dto = DateTimeOffset.FromUnixTimeSeconds(unixDateTime);
+                                claimValue = $"{claimValue} -- {dto:yyyy-MM-dd h:mm:ss tt} (UTC)";
+                            }
+                            catch (Exception ex)
+                            {
+#if DEBUG
+                                int foo = 1;
+#endif
+                            }
+                        }
+                    }
                     ClaimItems.Add(new ClaimInfo
                     {
                         ClaimType = claim.Type,
-                        ClaimValue = claim.Value
+                        ClaimValue = claimValue,
+                        ClaimValueType = claim.ValueType
                     });
                 }
             }
