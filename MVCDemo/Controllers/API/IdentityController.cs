@@ -1,5 +1,6 @@
 #if USE_IDSVR6
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+#endif
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCDemo.ComponentHelpers;
@@ -11,7 +12,11 @@ namespace MVCDemo.Controllers.API
 
     [Route("~/api/identity")]
     [ApiController]
+#if USE_IDSVR6
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+#else
+    [Authorize]
+#endif
     public class IdentityController : ControllerBase
     {
         [HttpGet]
@@ -34,4 +39,3 @@ namespace MVCDemo.Controllers.API
         }
     }
 }
-#endif
