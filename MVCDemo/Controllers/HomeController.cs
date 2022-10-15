@@ -11,10 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MVCDemo.Models.UserInfo;
+using Newtonsoft.Json;
 #if USE_IDSVR6
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 #endif
 using System.Threading.Tasks;
 
@@ -30,20 +31,20 @@ namespace MVCDemo.Controllers
 
         public HomeController(
 #if USE_IDSVR6
-            IOptions<IdentityServerOptions> idSvrOptions,
+            IOptions<AppSettings> appSettings,
 #endif
             ILogger<HomeController> logger)
         {
 #if USE_IDSVR6
-            IdSvrOptions = idSvrOptions.Value;
+            AppSettings = appSettings.Value;
 #endif
             _logger = logger;
         }
 
-#region Local Variables
+        #region Local Variables
 
 #if USE_IDSVR6
-        IdentityServerOptions IdSvrOptions { get; }
+        AppSettings AppSettings { get; }
 #endif
         private int Index0Count { get; set; }
 
@@ -78,22 +79,27 @@ namespace MVCDemo.Controllers
             try
             {
                 var accessToken = await HttpContext.GetTokenAsync("access_token");
-                if ((accessToken != null) && (IdSvrOptions != null) && !string.IsNullOrWhiteSpace(IdSvrOptions.Authority))
+                if ((accessToken != null) && (AppSettings != null) && !string.IsNullOrWhiteSpace(AppSettings.apiUrlRoot))
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string idSvrIdentityUrl = $"{IdSvrOptions.Authority}/identity";
+                    string idSvrIdentityUrl = $"{AppSettings.apiUrlRoot}/identity";
                     var content = await client.GetStringAsync(idSvrIdentityUrl);
 
-                    var parsed = JsonDocument.Parse(content);
-                    var formatted = JsonSerializer.Serialize(parsed, new JsonSerializerOptions { WriteIndented = true });
+//#if DEBUG
+//                    var parsed = System.Text.Json.JsonDocument.Parse(content);
+//                    var formatted = System.Text.Json.JsonSerializer.Serialize(parsed, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+//#endif
+
+                    TokenInfoResult tokenInfoResult = JsonConvert.DeserializeObject<TokenInfoResult>(content);
+                    return View(tokenInfoResult);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"TokenTest - {ex.GetType().Name}: {ex.Message}");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Error");
         }
 #endif
 

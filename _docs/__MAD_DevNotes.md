@@ -13,6 +13,9 @@
 		<td>
 			Additional conditional code for USE_IDSVR6
             including Home.TokenTest<br/>
+            Added branch USE_IDSVR6 with USE_IDSVR6 in project definitions<br/>
+            Added API controllers - Identity and WeatherForecast<br/>
+            Added view for TokenTest<br/>
 		</td>
 	</tr>
 	<tr>

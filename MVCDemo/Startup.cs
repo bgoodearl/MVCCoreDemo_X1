@@ -83,8 +83,6 @@ namespace MVCDemo
             if (!cookieMinutes.HasValue) cookieMinutes = 10;
 
 #if USE_IDSVR6
-            //Inject settings configuration file using Options pardigm
-            services.Configure<IdentityServerOptions>(options => Configuration.GetSection("IdentityServer").Bind(options));
             IdentityServerOptions idSverSettings = Configuration.GetSection("IdentityServer").Get<IdentityServerOptions>();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             {
@@ -101,6 +99,11 @@ namespace MVCDemo
                             options.Cookie.Path = authCookiePath; //10/10/2022 - causes problems with Blazor applets - if used for real, needs to come from configuration
                         }
                         options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieMinutes.Value);
+                    })
+                    .AddJwtBearer(options =>
+                    {
+                        options.Authority = idSverSettings.Authority;
+                        options.TokenValidationParameters.ValidateAudience = false;
                     })
                     .AddOpenIdConnect("oidc", options =>
                     {

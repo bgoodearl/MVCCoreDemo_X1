@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCDemo.Models.Demo;
 
 namespace MVCDemo.Controllers
 {
@@ -8,7 +9,8 @@ namespace MVCDemo.Controllers
         [Route("~/x2/[Controller]")]
         public IActionResult Index()
         {
-            return View();
+            DemoIndexViewModel model = new DemoIndexViewModel();
+            return View(model);
         }
 
         public IActionResult Counter()
