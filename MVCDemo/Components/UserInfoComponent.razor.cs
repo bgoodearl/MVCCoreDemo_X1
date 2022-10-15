@@ -9,7 +9,6 @@ using MDS = MVCDemo.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SSC = System.Security.Claims;
 
 namespace MVCDemo.Components
 {
@@ -134,7 +133,11 @@ namespace MVCDemo.Components
                     }
                 }
 
-                ClaimItems = new List<ClaimInfo>();
+                ClaimItems =
+#if true
+                    userInfo.User.GetClaimsInfoList();
+#else
+                    new List<ClaimInfo>();
                 foreach(var claim in userInfo.User.Claims)
                 {
                     string claimValue = claim.Value;
@@ -165,6 +168,7 @@ namespace MVCDemo.Components
                         ClaimValueType = claim.ValueType
                     });
                 }
+#endif
             }
 
         }
