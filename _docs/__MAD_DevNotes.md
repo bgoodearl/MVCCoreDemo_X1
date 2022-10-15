@@ -9,6 +9,13 @@
 		<th>Notes</th>
 	</tr>
 	<tr>
+		<td>10/15/2022</td><td>bg</td>
+		<td>
+			Additional conditional code for USE_IDSVR6
+            including Home.TokenTest<br/>
+		</td>
+	</tr>
+	<tr>
 		<td>10/13/2022</td><td>bg</td>
 		<td>
             Added middleware to ensure removal of auth cookie after signout<br/>

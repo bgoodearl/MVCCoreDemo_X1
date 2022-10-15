@@ -139,7 +139,8 @@ namespace MVCDemo.Components
                 {
                     string claimValue = claim.Value;
                     if (!string.IsNullOrWhiteSpace(claim.ValueType)
-                        && claim.ValueType == SSC.ClaimValueTypes.Integer)
+                        && ((claim.ValueType == SSC.ClaimValueTypes.Integer)
+                            || (claim.ValueType == "JSON")))
                     {
                         long unixDateTime;
                         if (!string.IsNullOrWhiteSpace(claimValue) && long.TryParse(claimValue, out unixDateTime))

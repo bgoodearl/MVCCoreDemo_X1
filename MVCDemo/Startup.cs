@@ -1,4 +1,4 @@
-//#define USE_IDSVR6 //***TODO: Put this in project settings
+//#define USE_IDSVR6 - put this definition in the project file
 using Demo.Infrastructure;
 using Demo.Shared.Interfaces;
 #if USE_IDSVR6
@@ -83,6 +83,8 @@ namespace MVCDemo
             if (!cookieMinutes.HasValue) cookieMinutes = 10;
 
 #if USE_IDSVR6
+            //Inject settings configuration file using Options pardigm
+            services.Configure<IdentityServerOptions>(options => Configuration.GetSection("IdentityServer").Bind(options));
             IdentityServerOptions idSverSettings = Configuration.GetSection("IdentityServer").Get<IdentityServerOptions>();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             {
