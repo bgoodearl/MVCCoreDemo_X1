@@ -1,22 +1,22 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿#if USE_IDSVR6
+using Microsoft.AspNetCore.Authentication;
+#endif
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-#if USE_IDSVR6
 using Microsoft.Extensions.Options;
-using MVCDemo.Models.Configuration;
-#endif
 using MVCDemo.Models;
+using MVCDemo.Models.Configuration;
 using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using MVCDemo.Models.UserInfo;
-using Newtonsoft.Json;
-#if USE_IDSVR6
+//using System.Linq;
 using System.Net.Http;
+#if USE_IDSVR6
 using System.Net.Http.Headers;
 #endif
+using MVCDemo.Models.UserInfo;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace MVCDemo.Controllers
@@ -25,27 +25,21 @@ namespace MVCDemo.Controllers
     [Route("~/x2/[Controller]/[Action]")]
     public class HomeController : Controller
     {
-        #region Read Only variables
+#region Read Only variables
         private readonly ILogger<HomeController> _logger;
-        #endregion Read Only variables
+#endregion Read Only variables
 
         public HomeController(
-#if USE_IDSVR6
             IOptions<AppSettings> appSettings,
-#endif
             ILogger<HomeController> logger)
         {
-#if USE_IDSVR6
             AppSettings = appSettings.Value;
-#endif
             _logger = logger;
         }
 
-        #region Local Variables
+#region Local Variables
 
-#if USE_IDSVR6
         AppSettings AppSettings { get; }
-#endif
         private int Index0Count { get; set; }
 
 #endregion Local Variables
@@ -73,26 +67,55 @@ namespace MVCDemo.Controllers
             return View();
         }
 
-#if USE_IDSVR6
+#if true //USE_IDSVR6
         public async Task<IActionResult> TokenTest()
         {
             try
             {
-                var accessToken = await HttpContext.GetTokenAsync("access_token");
-                if ((accessToken != null) && (AppSettings != null) && !string.IsNullOrWhiteSpace(AppSettings.apiUrlRoot))
+                if ((AppSettings != null) && !string.IsNullOrWhiteSpace(AppSettings.apiUrlRoot))
                 {
                     var client = new HttpClient();
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string idSvrIdentityUrl = $"{AppSettings.apiUrlRoot}/identity";
-                    var content = await client.GetStringAsync(idSvrIdentityUrl);
-
+                    string identityApiUrl = $"{AppSettings.apiUrlRoot}/identity";
+#if USE_IDSVR6
+                    var accessToken = await HttpContext.GetTokenAsync("access_token");
+                    if (accessToken != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                    }
+                    else
+                    {
+                        TokenInfoResult tokenInfoResult = new TokenInfoResult
+                        {
+                            ErrorMessage = "No Access Token"
+                        };
+                    }
+                    if (accessToken != null)
+#endif
+                    {
+                        var content = await client.GetStringAsync(identityApiUrl);
 //#if DEBUG
-//                    var parsed = System.Text.Json.JsonDocument.Parse(content);
-//                    var formatted = System.Text.Json.JsonSerializer.Serialize(parsed, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+//                        var parsed = System.Text.Json.JsonDocument.Parse(content);
+//                        var formatted = System.Text.Json.JsonSerializer.Serialize(parsed, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
 //#endif
-
-                    TokenInfoResult tokenInfoResult = JsonConvert.DeserializeObject<TokenInfoResult>(content);
-                    return View(tokenInfoResult);
+                        TokenInfoResult tokenInfoResult = null;
+                        try
+                        {
+                            tokenInfoResult = JsonConvert.DeserializeObject<TokenInfoResult>(content);
+                        }
+                        catch (JsonReaderException ex)
+                        {
+                            _logger.LogError($"TokenTest - {ex.GetType().Name}: {ex.Message}");
+                            //_logger.LogDebug(content);
+                            tokenInfoResult = new TokenInfoResult
+                            {
+                                ErrorMessage = $"{ex.GetType().Name}: {ex.Message}"
+                            };
+                        }
+                        if (tokenInfoResult != null)
+                        {
+                            return View(tokenInfoResult);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -103,7 +126,7 @@ namespace MVCDemo.Controllers
         }
 #endif
 
-        [AllowAnonymous]
+                    [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

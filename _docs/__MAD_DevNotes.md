@@ -16,6 +16,7 @@
             Added branch USE_IDSVR6 with USE_IDSVR6 in project definitions<br/>
             Added API controllers - Identity and WeatherForecast<br/>
             Added view for TokenTest<br/>
+            Enabled TokenTest when NOT USE_IDSVR6<br/>
 		</td>
 	</tr>
 	<tr>

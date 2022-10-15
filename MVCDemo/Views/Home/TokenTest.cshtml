@@ -13,6 +13,8 @@
     <p>User: [@Model.Username]</p>
 </div>
 
+@if (Model.ClaimsInfo.Count > 0)
+{
 <div>
     <table class="table table-striped table-bordered table-condensed">
         <thead>
@@ -32,3 +34,4 @@
         </tbody>
     </table>
 </div>
+}
