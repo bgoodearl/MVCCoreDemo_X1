@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 #if USE_IDSVR6
 using Microsoft.IdentityModel.Tokens;
+using MVCDemo.AuthHelpers;
 using MVCDemo.Models;
 using MVCDemo.Models.Configuration;
 using System;
@@ -83,6 +84,7 @@ namespace MVCDemo
             if (!cookieMinutes.HasValue) cookieMinutes = 10;
 
 #if USE_IDSVR6
+            services.Configure<IdentityServerOptions>(options => Configuration.GetSection("IdentityServer").Bind(options));
             IdentityServerOptions idSverSettings = Configuration.GetSection("IdentityServer").Get<IdentityServerOptions>();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             {
@@ -104,6 +106,10 @@ namespace MVCDemo
                     {
                         options.Authority = idSverSettings.Authority;
                         options.TokenValidationParameters.ValidateAudience = false;
+                        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+                        {
+                            OnAuthenticationFailed = JwtBearerEventHandlers.OnAuthenticationFailedHandler
+                        };
                     })
                     .AddOpenIdConnect("oidc", options =>
                     {
@@ -120,7 +126,8 @@ namespace MVCDemo
                         options.Scope.Add("profile");
                         options.Scope.Add("role");
                         options.Scope.Add("user");
-                        //options.Scope.Add("offline_access"); //10/11/2022 - needs further investigation
+                        //options.Scope.Add("api");
+                        options.Scope.Add("offline_access");
 
                         // role is an array and is special
                         options.ClaimActions.MapAllExcept("role", "latestauthtime");
@@ -185,6 +192,7 @@ namespace MVCDemo
         {
             if (env.IsDevelopment())
             {
+                //app.UseExceptionHandler("/Home/Error"); //Use this when testing for what user will see
                 app.UseDeveloperExceptionPage();
             }
             else

@@ -19,7 +19,8 @@ namespace MVCDemo.Controllers
             if (!HttpContext.User.Identity.IsAuthenticated)
             {
 #if USE_IDSVR6
-                return Challenge("oidc");
+                IActionResult actionResult = Challenge("oidc");
+                return actionResult;
 #else
                 return Challenge(OpenIdConnectDefaults.AuthenticationScheme);
 #endif

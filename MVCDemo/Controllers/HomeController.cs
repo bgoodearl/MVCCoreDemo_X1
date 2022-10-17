@@ -18,28 +18,34 @@ using System.Net.Http.Headers;
 using MVCDemo.Models.UserInfo;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using MVCDemo.AuthHelpers;
+using Microsoft.AspNetCore.Http;
 
 namespace MVCDemo.Controllers
 {
     [Authorize]
     [Route("~/x2/[Controller]/[Action]")]
-    public class HomeController : Controller
+    public class HomeController : MDControllerBase
     {
-#region Read Only variables
+        #region Read Only variables
+        private readonly IdentityServerOptions _identityServerOptions;
         private readonly ILogger<HomeController> _logger;
 #endregion Read Only variables
 
         public HomeController(
             IOptions<AppSettings> appSettings,
+            ILogger<MDControllerBase> baseLogger,
+            IOptions<IdentityServerOptions> identityServerOptions,
+            IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger)
+            : base(appSettings, baseLogger, httpContextAccessor)
         {
-            AppSettings = appSettings.Value;
+            _identityServerOptions = identityServerOptions.Value;
             _logger = logger;
         }
 
 #region Local Variables
 
-        AppSettings AppSettings { get; }
         private int Index0Count { get; set; }
 
 #endregion Local Variables
@@ -72,12 +78,25 @@ namespace MVCDemo.Controllers
         {
             try
             {
-                if ((AppSettings != null) && !string.IsNullOrWhiteSpace(AppSettings.apiUrlRoot))
+                IdentityModel.Client.TokenResponse tokenResponse = await IdSvrTokenHelper.GetToken(_identityServerOptions);
+                if (tokenResponse == null)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"TokenTest(1) - {ex.GetType().Name}: {ex.Message}");
+            }
+            try
+            {
+                string apiUrlRoot = GetApiUrlRoot();
+                if (!string.IsNullOrWhiteSpace(apiUrlRoot))
                 {
                     var client = new HttpClient();
-                    string identityApiUrl = $"{AppSettings.apiUrlRoot}/identity";
+                    string identityApiUrl = $"{apiUrlRoot}/identity";
 #if USE_IDSVR6
-                    var accessToken = await HttpContext.GetTokenAsync("access_token");
+                    string accessToken = await GetApiTokenAsync();
                     if (accessToken != null)
                     {
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -126,7 +145,7 @@ namespace MVCDemo.Controllers
         }
 #endif
 
-                    [AllowAnonymous]
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

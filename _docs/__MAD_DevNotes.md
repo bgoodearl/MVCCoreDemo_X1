@@ -9,6 +9,13 @@
 		<th>Notes</th>
 	</tr>
 	<tr>
+		<td>10/17/2022</td><td>bg</td>
+		<td>
+			Added MDControllerBase<br/>
+            Attempt to use RequestClientCredentialsTokenAsync<br/>
+		</td>
+	</tr>
+	<tr>
 		<td>10/15/2022</td><td>bg</td>
 		<td>
 			Additional conditional code for USE_IDSVR6
