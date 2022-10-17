@@ -126,13 +126,12 @@ namespace MVCDemo
                         options.Scope.Add("profile");
                         options.Scope.Add("role");
                         options.Scope.Add("user");
-                        //options.Scope.Add("api");
+                        //options.Scope.Add("test");
                         options.Scope.Add("offline_access");
 
                         // role is an array and is special
-                        options.ClaimActions.MapAllExcept("role", "latestauthtime");
+                        options.ClaimActions.MapAllExcept("role");
 
-                        options.ClaimActions.MapUniqueJsonKey("latestauthtime", "latestauthtime", JsonClaimValueTypes.Json);
                         options.ClaimActions.MapJsonKey("role", "role");
 
                         options.TokenValidationParameters = new TokenValidationParameters
